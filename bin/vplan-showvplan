@@ -1,0 +1,10 @@
+#!/bin/bash
+if [ -e /tmp/error.html ] || [ -e /tmp/praes.lock ]
+then
+	rm /tmp/error.html
+	rm /tmp/praes.lock
+	/usr/bin/killall midori
+	/usr/bin/killall oosplash
+	/usr/bin/killall soffice.bin
+	su pi -c "DISPLAY=:0 /usr/bin/midori -e Fullscreen -a http://server.morz.de/vplan-leh > /dev/null 2>&1" &
+fi

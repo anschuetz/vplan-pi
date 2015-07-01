@@ -1,0 +1,6 @@
+#!/bin/bash
+if ! /usr/bin/pgrep "vplan-observer" > /dev/null
+then
+	/opt/morz/bin/vplan-observer &
+	/bin/echo vplan-observer gestartet
+fi

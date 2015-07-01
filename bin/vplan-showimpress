@@ -1,0 +1,16 @@
+#!/bin/bash
+if [ -e /tmp/error.html ]
+then
+	rm /tmp/error.html
+fi
+if ! [ -e /tmp/praes.lock ]
+then
+	NAME=$(cat /tmp/praesentation| head -n 1)
+	/usr/bin/killall midori
+	/usr/bin/killall libreoffice
+	/usr/bin/killall oosplash
+	/usr/bin/killall soffice.bin
+
+	su pi -c "DISPLAY=:0 /usr/bin/libreoffice --nologo --norestore -show $NAME" &
+	echo $(date) > /tmp/praes.lock
+fi

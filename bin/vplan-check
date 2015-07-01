@@ -1,0 +1,37 @@
+#!/bin/bash
+#SERVERIP=10.16.1.1
+#SERVERNAME="server.morz.de"
+#URL="http://$SERVERNAME/vplan-leh/"
+. /opt/morz/bin/vplan-config
+MELDUNG="ALLES OK"
+if ! /bin/ping -W 1 -c 1 $SERVERIP  > /dev/null 2>&1
+then
+    MELDUNG="$SERVERIP nicht erreichbar (ping)!"
+    exit 1
+else
+    if ! /bin/ping -W 1 -c 1 $SERVERNAME > /dev/null 2>&1
+    then
+	MELDUNG="$SERVERNAME nicht auflösbar. DNS-Problem?"
+	exit 2
+    else
+	if ! /usr/bin/wget -q -O /dev/null "$URL"
+	then
+	     MELDUNG="$URL antwortet nicht. Läuft der Webserver?"
+	     exit 3
+	fi # wget URL
+    fi # ping servername
+fi # ping serverip
+
+if [ -e /tmp/praesentation ] # Datei anlegen, um Präsentation abzuspielen...
+then
+	MELDUNG="Präsentation soll abgespielt werden."
+	exit 20
+fi
+
+if ! /usr/bin/pgrep midori > /dev/null 2>&1
+then
+	MELDUNG="Kein Midori-Prozess gefunden. midori läuft nicht."
+	exit 4
+fi # läuft midori überhaupt?
+
+# echo $MELDUNG

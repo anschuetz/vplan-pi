@@ -1,0 +1,34 @@
+#!/bin/bash
+while true
+do
+ /opt/morz/bin/vplan-check
+ RESULT=$?
+ case $RESULT in
+   1) # exitcode 1 bedeutet, Server IP nicht erreichbar. Netzwerk?
+	/bin/echo Server IP ist nicht erreichbar
+	/bin/echo '<html><title>ERROR</title><body><h1>NETZWERKFEHLER</h1><hr/>PING schl&auml;gt fehl! Steckt das Netzwerkkabel? Ist der Switch eingesteckt?</body></html>' > /tmp/error.html
+	/opt/morz/bin/vplan-showerror
+   ;;
+   2) # exitcode 2 bedeutet, Server Name nicht erreichbar. DNS?
+	/bin/echo ServerName ist nicht erreichbar
+	/bin/echo '<html><title>ERROR</title><body><h1>NETZWERKFEHLER</h1><hr/>NAMENSAUFL&Ouml;SUNG schl&auml;gt fehl! Läuft der DNS-Server (service bind9 restart) ?</body></html>' > /tmp/error.html
+	/opt/morz/bin/vplan-showerror
+   ;;
+   3) # exitcode 3 bedeutet, URL nicht erreichbar. APACHE?
+   	/bin/echo URL ist nicht erreichbar
+	/bin/echo '<html><title>ERROR</title><body><h1>LADEFEHLER</h1><hr/>URL nicht gefunden. Läuft der Web-Server (service apache2 restart) ?</body></html>' > /tmp/error.html
+	/opt/morz/bin/vplan-showerror
+   ;;
+   4) # exitcode 4 bedeutet, dass kein midori-Prozess läuft
+	/opt/morz/bin/vplan-showvplan
+   ;;
+   20) # exitcode 20 bedeutet, es soll eine Präsentation abgespielt werden.
+	/opt/morz/bin/vplan-showimpress
+   ;;
+   *) # 0 und alle anderen... alles in Ordnung
+        /opt/morz/bin/vplan-showvplan
+   ;;
+ esac
+ sleep 10
+done
+
