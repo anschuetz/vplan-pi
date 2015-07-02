@@ -1,13 +1,13 @@
 # vplan-pi
 Einsatz auf einem RaspberryPi als Digitale Anzeigentafel.
 Momentane Funktion:
-- Anzeige einer Http-Seite.
+- Anzeige einer HTTP-Seite.
   Fehler wie Netzwerkkabel steckt nicht, DNS ist kaputt, Webserver läuft nicht,... 
   werden abgefangen und ordentliche  Meldungen angezeigt. 
   Periodisch (default 10s) wird geprüft, ob ein Fehler vorliegt (oder wieder behoben wurde) 
-  und dann das System wieder  hergestellt.
+  und dann das System wieder hergestellt.
 - Anzeige einer Impress-Präsentation (ODT-Datei)
-  Steuerung momentan noch durch anlegen einer Datei, die den Pfad zur Präsentation enthält.
+  Steuerung momentan noch durch Anlegen einer Datei, die den Pfad zur Präsentation enthält.
 
 Installation:
 - Kopieren des Repos nach /opt/vplan-pi
