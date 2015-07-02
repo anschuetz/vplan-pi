@@ -1,34 +1,48 @@
 #!/bin/bash
+# filename:     vplan-observer
+# license:      GPLv3
+# Dieses Skript ist Teil der Skriptsammlung "vplan-pi", die für den Betrieb einer
+# digitalen Vertretungsplan-Anzeige auf RaspberryPi-Basis geschrieben wurde.
+# Script created by Jesko Anschütz (jesko.anschuetz-at-linuxmuster.net) July 2015
+
+# Dieses Skript ruft periodisch vplan-check auf und erstellt je nach Fehler
+# Meldungen mit Lösungsvorschlägen oder behebt die Fehler direkt.
+# Außerdem wird es sozusagen dazu missbraucht, eine Präsentation anzuzeigen,
+# falls in /tmp/praesentation ein Pfad zu einer Präsentation steht.
+
+
+
+KONFIGPFAD=/opt/vplan-pi/etc
+
+. ${KONFIGPFAD}/vplan-config
+
 while true
 do
- /opt/morz/bin/vplan-check
+ ${SKRIPTPFAD}/vplan-check
  RESULT=$?
  case $RESULT in
    1) # exitcode 1 bedeutet, Server IP nicht erreichbar. Netzwerk?
-	/bin/echo Server IP ist nicht erreichbar
-	/bin/echo '<html><title>ERROR</title><body><h1>NETZWERKFEHLER</h1><hr/>PING schl&auml;gt fehl! Steckt das Netzwerkkabel? Ist der Switch eingesteckt?</body></html>' > /tmp/error.html
-	/opt/morz/bin/vplan-showerror
+	/bin/echo '<html><title>ERROR</title><body><h1>NETZWERKFEHLER</h1><hr/>PING schl&auml;gt fehl! Steckt das Netzwerkkabel? Ist der Switch eingesteckt?</body></html>' > ${ERRORHTML}
+	${SKRIPTPFAD}/vplan-showerror
    ;;
    2) # exitcode 2 bedeutet, Server Name nicht erreichbar. DNS?
-	/bin/echo ServerName ist nicht erreichbar
-	/bin/echo '<html><title>ERROR</title><body><h1>NETZWERKFEHLER</h1><hr/>NAMENSAUFL&Ouml;SUNG schl&auml;gt fehl! Läuft der DNS-Server (service bind9 restart) ?</body></html>' > /tmp/error.html
-	/opt/morz/bin/vplan-showerror
+	/bin/echo '<html><title>ERROR</title><body><h1>NETZWERKFEHLER</h1><hr/>NAMENSAUFL&Ouml;SUNG schl&auml;gt fehl! Läuft der DNS-Server (service bind9 restart) ?</body></html>' > ${ERRORHTML}
+	${SKRIPTPFAD}/vplan-showerror
    ;;
    3) # exitcode 3 bedeutet, URL nicht erreichbar. APACHE?
-   	/bin/echo URL ist nicht erreichbar
-	/bin/echo '<html><title>ERROR</title><body><h1>LADEFEHLER</h1><hr/>URL nicht gefunden. Läuft der Web-Server (service apache2 restart) ?</body></html>' > /tmp/error.html
-	/opt/morz/bin/vplan-showerror
+	/bin/echo '<html><title>ERROR</title><body><h1>LADEFEHLER</h1><hr/>URL nicht gefunden. Läuft der Web-Server (service apache2 restart) ?</body></html>' > ${ERRORHTML}
+	${SKRIPTPFAD}/vplan-showerror
    ;;
    4) # exitcode 4 bedeutet, dass kein midori-Prozess läuft
-	/opt/morz/bin/vplan-showvplan
+	${SKRIPTPFAD}/vplan-showvplan
    ;;
    20) # exitcode 20 bedeutet, es soll eine Präsentation abgespielt werden.
-	/opt/morz/bin/vplan-showimpress
+	${SKRIPTPFAD}/vplan-showimpress
    ;;
    *) # 0 und alle anderen... alles in Ordnung
-        /opt/morz/bin/vplan-showvplan
+        ${SKRIPTPFAD}/vplan-showvplan
    ;;
  esac
- sleep 10
+ sleep ${SLEEPTIME}
 done
 

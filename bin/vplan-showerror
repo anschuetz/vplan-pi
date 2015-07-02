@@ -1,7 +1,19 @@
 #!/bin/bash
-if [ -e /tmp/error.html ]
+# filename:     vplan-showerror
+# license:      GPLv3
+# Dieses Skript ist Teil der Skriptsammlung "vplan-pi", die für den Betrieb einer
+# digitalen Vertretungsplan-Anzeige auf RaspberryPi-Basis geschrieben wurde.
+# Script created by Jesko Anschütz (jesko.anschuetz-at-linuxmuster.net) July 2015
+
+# Dieses Skript zeigt eine Fehlerseite an, falls die Error-Datei existiert
+
+KONFIGPFAD=/opt/vplan-pi/etc
+
+. ${KONFIGPFAD}/vplan-config
+
+if [ -e ${ERRORHTML ]
 then
 	/usr/bin/killall midori
-	su pi -c "DISPLAY=:0 /usr/bin/midori -e Fullscreen -a file:///tmp/error.html > /dev/null 2>&1" &
+	su pi -c "DISPLAY=:0 /usr/bin/midori -e Fullscreen -a file://${ERRORHTML} > /dev/null 2>&1" &
 fi
 

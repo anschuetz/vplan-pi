@@ -1,10 +1,24 @@
 #!/bin/bash
-if [ -e /tmp/error.html ] || [ -e /tmp/praes.lock ]
+# filename:     vplan-check
+# license:      GPLv3
+# Dieses Skript ist Teil der Skriptsammlung "vplan-pi", die für den Betrieb einer
+# digitalen Vertretungsplan-Anzeige auf RaspberryPi-Basis geschrieben wurde.
+# Script created by Jesko Anschütz (jesko.anschuetz-at-linuxmuster.net) July 2015
+
+# Dieses Skript zeigt den Vertretungsplan an. Dieser muss eine http-Seite sein,
+# die in vplan-config festgelegt ist.
+
+KONFIGPFAD=/opt/vplan-pi/etc
+
+. ${KONFIGPFAD}/vplan-config
+
+if [ -e ${ERRORHTML} ] || [ -e ${ODTLOCK} ]
 then
-	rm /tmp/error.html
-	rm /tmp/praes.lock
-	/usr/bin/killall midori
-	/usr/bin/killall oosplash
-	/usr/bin/killall soffice.bin
-	su pi -c "DISPLAY=:0 /usr/bin/midori -e Fullscreen -a http://server.morz.de/vplan-leh > /dev/null 2>&1" &
+	rm ${ERRORHTML}
+	rm ${ODTLOCK}
+	for process in midori oosplash soffice.bin
+	do
+		/usr/bin/killall ${process}
+	done
+	su pi -c "DISPLAY=:0 /usr/bin/midori -e Fullscreen -a ${URL} > /dev/null 2>&1" &
 fi

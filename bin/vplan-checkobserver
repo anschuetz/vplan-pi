@@ -1,6 +1,23 @@
 #!/bin/bash
+# filename:     vplan-checkobserver
+# license:      GPLv3
+# Dieses Skript ist Teil der Skriptsammlung "vplan-pi", die für den Betrieb einer
+# digitalen Vertretungsplan-Anzeige auf RaspberryPi-Basis geschrieben wurde.
+# Script created by Jesko Anschütz (jesko.anschuetz-at-linuxmuster.net) July 2015
+
+# Dieses Skript prüft, ob vplan-observer läuft und startet diesen ggf.
+# Um dieses Skript sinnvoll zu verwenden erstellt man eine Datei in /etc/cron.d
+# mit folgendem Inhalt:
+# */5 * * * *  root /opt/vplan-pi/bin/vplan-observer > /dev/null 2>&1
+
+
+KONFIGPFAD=/opt/vplan-pi/etc
+
+. ${KONFIGPFAD}/vplan-config
+
+
 if ! /usr/bin/pgrep "vplan-observer" > /dev/null
 then
-	/opt/morz/bin/vplan-observer &
+	${SKRIPTPFAD}/vplan-observer &
 	/bin/echo vplan-observer gestartet
 fi

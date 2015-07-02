@@ -1,28 +1,38 @@
 #!/bin/bash
-#SERVERIP=10.16.1.1
-#SERVERNAME="server.morz.de"
-#URL="http://$SERVERNAME/vplan-leh/"
-. /opt/morz/bin/vplan-config
+# filename:	vplan-check
+# license:	GPLv3
+# Dieses Skript ist Teil der Skriptsammlung "vplan-pi", die für den Betrieb einer
+# digitalen Vertretungsplan-Anzeige auf RaspberryPi-Basis geschrieben wurde.
+# Script created by Jesko Anschütz (jesko.anschuetz-at-linuxmuster.net) July 2015
+
+# Dieses Skript prüft gelegentlich auftretende Fehlerquellen ab und gibt je nach
+# Fehler verschiedene Werte zurück, die von vplan-observer ausgewertet werden.
+
+
+KONFIGPFAD=/opt/vplan-pi/etc
+
+. ${KONFIGPFAD}/vplan-config
+
 MELDUNG="ALLES OK"
-if ! /bin/ping -W 1 -c 1 $SERVERIP  > /dev/null 2>&1
+if ! /bin/ping -W 1 -c 1 ${SERVERIP}  > /dev/null 2>&1
 then
-    MELDUNG="$SERVERIP nicht erreichbar (ping)!"
+    MELDUNG="${SERVERIP} nicht erreichbar (ping)!"
     exit 1
 else
-    if ! /bin/ping -W 1 -c 1 $SERVERNAME > /dev/null 2>&1
+    if ! /bin/ping -W 1 -c 1 ${SERVERNAME} > /dev/null 2>&1
     then
-	MELDUNG="$SERVERNAME nicht auflösbar. DNS-Problem?"
+	MELDUNG="${SERVERNAME} nicht auflösbar. DNS-Problem?"
 	exit 2
     else
-	if ! /usr/bin/wget -q -O /dev/null "$URL"
+	if ! /usr/bin/wget -q -O /dev/null "${URL}"
 	then
-	     MELDUNG="$URL antwortet nicht. Läuft der Webserver?"
+	     MELDUNG="${URL} antwortet nicht. Läuft der Webserver?"
 	     exit 3
 	fi # wget URL
     fi # ping servername
 fi # ping serverip
 
-if [ -e /tmp/praesentation ] # Datei anlegen, um Präsentation abzuspielen...
+if [ -e ${ODT} ] # Datei angelegt, um Präsentation abzuspielen?
 then
 	MELDUNG="Präsentation soll abgespielt werden."
 	exit 20

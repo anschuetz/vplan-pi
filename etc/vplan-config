@@ -1,0 +1,11 @@
+# Hier werden die ganzen Werte konfiguriert, die eventuell angepasst werden müssten
+
+SERVERIP=10.16.1.1
+SERVERNAME="server.morz.de"
+URL="http://${SERVERNAME}/vplan-leh/"
+SKRIPTPFAD="/opt/vplan-pi/bin"
+ERRORHTML="/tmp/error.html"
+ODTLOCK="/tmp/praes.lock"
+ODT="/tmp/praesentation"
+SLEEPTIME="10"
+

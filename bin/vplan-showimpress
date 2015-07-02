@@ -1,16 +1,30 @@
 #!/bin/bash
-if [ -e /tmp/error.html ]
-then
-	rm /tmp/error.html
-fi
-if ! [ -e /tmp/praes.lock ]
-then
-	NAME=$(cat /tmp/praesentation| head -n 1)
-	/usr/bin/killall midori
-	/usr/bin/killall libreoffice
-	/usr/bin/killall oosplash
-	/usr/bin/killall soffice.bin
+# filename:     vplan-showimpress
+# license:      GPLv3
+# Dieses Skript ist Teil der Skriptsammlung "vplan-pi", die für den Betrieb einer
+# digitalen Vertretungsplan-Anzeige auf RaspberryPi-Basis geschrieben wurde.
+# Script created by Jesko Anschütz (jesko.anschuetz-at-linuxmuster.net) July 2015
 
-	su pi -c "DISPLAY=:0 /usr/bin/libreoffice --nologo --norestore -show $NAME" &
-	echo $(date) > /tmp/praes.lock
+# Dieses Skript zeigt eine OpenDocumentPresentation (ODP-Datei) an.
+# Den Pfad zur Datei erhält sie aus der Steuerdatei $ODT, die in vplan-config
+# festgelegt ist.
+
+KONFIGPFAD=/opt/vplan-pi/etc
+
+. ${KONFIGPFAD}/vplan-config
+
+if [ -e ${ERRORHTML} ]
+then
+	rm ${ERRORHTML}
+fi
+if ! [ -e ${ODTLOCK} ]
+then
+	NAME=$(cat ${ODT}| head -n 1)
+	for process in midori libreoffice oosplash soffice.bin
+	do
+		/usr/bin/killall ${process}
+	done
+
+	su pi -c "DISPLAY=:0 /usr/bin/libreoffice --nologo --norestore -show ${NAME}" &
+	echo $(date) > ${ODTLOCK}
 fi
