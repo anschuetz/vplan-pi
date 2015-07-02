@@ -10,7 +10,7 @@ Momentane Funktion:
   Steuerung momentan noch durch Anlegen einer Datei, die den Pfad zur Präsentation enthält.
 
 Installation:
-- Kopieren des Repos nach /opt/vplan-pi
+- Kopieren des Repos nach /opt/vplan-pi (cd /opt/ ; git clone https://github.com/anschuetz/vplan-pi)
 - Anpassen der Konfiguration in /opt/vplan-pi/etc/vplan-config
 - Einrichten eines cron-jobs, der alle 5 Minuten /opt/vplan-pi/bin/vplan-checkobserver aufruft.
 
